@@ -25,7 +25,7 @@ public class LaBala : MonoBehaviour
         explosionBalaEspecial.Play();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) // Tipos de colisiones que permite la bala
     {
         if(collision.gameObject.tag == "Enemy")
         {

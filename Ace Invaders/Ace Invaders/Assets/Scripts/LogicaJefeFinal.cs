@@ -7,16 +7,15 @@ using UnityEngine.SceneManagement;
 public class LogicaJefeFinal : Enemigos
 {
     string pasos = "Iniciar";
-    int direccionalH = 1;
+    int direccionalH = 1; // Variables para determinar diferentes tipos de direcciones al mismo tiempo
     int direccionalV = 1;
-    float contador = 0f;
-    public Text laifu;
+    public Text laifu; // Muestra en el UI Canvas la vida del jefe final
 
     void Awake()
     {
-        durabilidad = 2000;
-        velocidadMovimiento = 200f;
-        audioUsar = GetComponent<AudioSource>();
+        durabilidad = 2000; // Vida del Jefe Final
+        velocidadMovimiento = 200f; // Velocidad de movimiento
+        audioUsar = GetComponent<AudioSource>(); // Sonidos del jefe
 
     }
 
@@ -25,7 +24,7 @@ public class LogicaJefeFinal : Enemigos
         Mover();
     }
 
-    void PasoInicial()
+    void PasoInicial() // Animacion de entrada del jefe
     {
         transform.position += transform.right * (50f) * Time.deltaTime; // Transforma la posicion hacia la derecha    
         if (transform.localPosition.z <= 25)
@@ -36,7 +35,7 @@ public class LogicaJefeFinal : Enemigos
         }
     }
 
-    void PasoRebotes()
+    void PasoRebotes() // Funcion que hace que el jefe se mueva por la pantalla rebotando
     {
 
         transform.position += direccionalH * transform.forward * (velocidadMovimiento) * Time.deltaTime; // Transforma la posicion hacia la derecha  
@@ -72,7 +71,7 @@ public class LogicaJefeFinal : Enemigos
         }
     }
 
-    void Mover()
+    void Mover() // Determina ls pasos del movimiento del jefe
     {
         switch (pasos)
         {
@@ -88,7 +87,7 @@ public class LogicaJefeFinal : Enemigos
     }
     
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) // colisiones que acepta el jefe
     {
         if (collision.gameObject.name == "BalaNormal")
         {
@@ -119,13 +118,13 @@ public class LogicaJefeFinal : Enemigos
 
                 EfectoMuerteExplosiva();
 
-                Invoke("GoVictory", 0.8f);
+                Invoke("GoVictory", 0.8f); // Se llama la funcion de la victoria del jugador cuando el jefe es destruido
                 Destroy(gameObject, 1f);
             }
         }
     }
 
-    void GoVictory()
+    void GoVictory() // Funcion que determina la victoria del jugador
     {
         SceneManager.LoadScene("Ganaste");
     }

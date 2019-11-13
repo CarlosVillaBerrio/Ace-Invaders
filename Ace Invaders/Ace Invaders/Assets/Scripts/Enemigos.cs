@@ -52,22 +52,22 @@ public class Enemigos : MonoBehaviour
 
     void Start()
     {
-        audioUsar = GetComponent<AudioSource>();
+        audioUsar = GetComponent<AudioSource>(); // Obtiene el audiosource para los sonidos de las naves enemigas
     }
 
-    public void EfectoMuerteExplosiva()
+    public void EfectoMuerteExplosiva() // Efectos audiovisuales de retroalimentacion de los enemigos
     {
         audioUsar.PlayOneShot(explosionMuerteSonido);
         explosionMuere.Stop();
         explosionMuere.Play();
     }
 
-    public void CaeAvion()
+    public void CaeAvion() // Funcion que permite contar los enemigos destruidos
     {
         if (!estadoMuerto)
         {
             FindObjectOfType<ControladorEnemigos>().ComprobarOla();
-            estadoMuerto = true;
+            estadoMuerto = true; // variable auxiliar para que no cuente varias veces al mismo muerto
         }
     }
 }

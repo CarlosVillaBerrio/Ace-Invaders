@@ -66,12 +66,18 @@ public class LogicaJugador : MonoBehaviour
     [Header("Textos de la interfaz")]
     public Text laifu;
 
+    [Header("Modo APK")]
+    protected FixedJoystick joystick;
+    LogicaBotones[] botones = new LogicaBotones[2];
+
     void Start()
     {
-        audioUsar = GetComponent<AudioSource>();
-        theTransform = GetComponent<Transform>();
-        camaraPantallaXYPlus = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-        proteccion.SetActive(false);
+        audioUsar = GetComponent<AudioSource>(); // Obtiene el audiosource para manipular sonidos
+        theTransform = GetComponent<Transform>(); // Obtiene el transform del objeto para aplicar la restriccion de camara
+        camaraPantallaXYPlus = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)); // Adquiere el tamaño de la pantalla dependiendo de la resolucion
+        proteccion.SetActive(false); // Desactiva el escudo al inicio
+        joystick = FindObjectOfType<FixedJoystick>(); // Joystick para mover la nave
+        botones = FindObjectsOfType<LogicaBotones>(); // Botones que permiten disparar los 2 tipos de balas
     }
 
 
@@ -83,23 +89,23 @@ public class LogicaJugador : MonoBehaviour
 
     
 
-    IEnumerator ReiniciarTiempoNoDisparo()
+    IEnumerator ReiniciarTiempoNoDisparo() // Permite ajustar la cadencia de disparo
     {
         yield return new WaitForSeconds(ritmoDeDisparo);
         tiempoNoDisparo = false;
     }
-
-    void Disparar()
+     
+    void Disparar() // Funcion para disparar los proyectiles
     {
-        if (tiempoNoDisparo) return;
+        if (tiempoNoDisparo) return; // Condicion para que se cumpla la cadencia
 
 
-        if (Input.GetKey(KeyCode.F))
+        if (Input.GetKey(KeyCode.F) || botones[0].pressed) // Botones que permiten el disparo
         {
             ritmoDeDisparo = cadenciaNormal;
             TiroNormal();
         }
-        else if (Input.GetKeyDown(KeyCode.G))
+        else if (Input.GetKeyDown(KeyCode.G) || botones[1].pressed) // Botones que permiten el disparo
         {
             ritmoDeDisparo = cadenciaEspecial;
             TiroEspecial();
@@ -107,7 +113,7 @@ public class LogicaJugador : MonoBehaviour
 
     }
 
-    void efectoBalaSeDestruye()
+    void efectoBalaSeDestruye() // Detalle de la bala especial cuando se destruye
     {
         if(balaInstanceS != null)
         {
@@ -119,36 +125,36 @@ public class LogicaJugador : MonoBehaviour
         
     }
 
-    void EfectoDisparo()
+    void EfectoDisparo() // Efecto de fogocidad del disparo
     {       
         fuegoDeArma.Stop();
         fuegoDeArma.Play();        
     }
 
-    void EfectoDisparoEspecial()
+    void EfectoDisparoEspecial() // Efecto de fogocidad del disparo
     {
         fuegoDeArmaEspecial.Stop();
         fuegoDeArmaEspecial.Play();
     }
     
-    void TiroNormal()
+    void TiroNormal() // Permite lanzar un proyectil y aplicar efectos audiovisuales
     {
-        audioUsar.PlayOneShot(disparoNormal);
+        audioUsar.PlayOneShot(disparoNormal); // Inicia el sonido que representa el disparo
         tiempoNoDisparo = true;
         EfectoDisparo();
-        GameObject balaInstance;
+        GameObject balaInstance; // Crea la variable de la bala
 
-        balaInstance = Instantiate(balaNormal, lanzador.position, Quaternion.identity);
+        balaInstance = Instantiate(balaNormal, lanzador.position, Quaternion.identity); // Instancia la bala
 
-        balaInstance.AddComponent<Rigidbody>().AddForce(lanzador.up * -100 * velocidadProyectilNormal);
-        balaInstance.name = "BalaNormal";
-        balaInstance.AddComponent<LaBala>().dañoNormal = dañoNormal;
+        balaInstance.AddComponent<Rigidbody>().AddForce(lanzador.up * -100 * velocidadProyectilNormal); // añade rigidbody para aplicarle fuerza al objeto
+        balaInstance.name = "BalaNormal"; // Le pone nombre al objeto para futuras busquedas
+        balaInstance.AddComponent<LaBala>().dañoNormal = dañoNormal; // Le asigna el daño a la bala
 
-        StartCoroutine(ReiniciarTiempoNoDisparo());
-        Destroy(balaInstance, 1f);
+        StartCoroutine(ReiniciarTiempoNoDisparo()); // Aplica la cadencia de tiro
+        Destroy(balaInstance, 1f); // Destruye la bala
     }
 
-    void TiroEspecial()
+    void TiroEspecial() // Lo mismo que el tiro normal, solo que esta vez aplicado a la bala especial
     {
         audioUsar.PlayOneShot(disparoEspecial);
         tiempoNoDisparo = true;
@@ -161,7 +167,7 @@ public class LogicaJugador : MonoBehaviour
         balaInstanceS.AddComponent<LaBala>().dañoEspecial = dañoEspecial;
 
         StartCoroutine(ReiniciarTiempoNoDisparo());
-        Invoke("efectoBalaSeDestruye", 2f);
+        Invoke("efectoBalaSeDestruye", 2f); // Aplica efecto especial de destruccion
         Destroy(balaInstanceS, 2f);
     }
 
@@ -191,39 +197,44 @@ public class LogicaJugador : MonoBehaviour
         }
     }
 
-    void ActivacionProteccion()
+    void ActivacionProteccion() // Despliega el escudo cuando es llamada la funcion
     {
         if(!proteccion.activeSelf)
         {
             proteccion.SetActive(true);
         }
 
-        Invoke("DesactivadorDeEscudo", tiempoInvulnerable);
+        Invoke("DesactivadorDeEscudo", tiempoInvulnerable); // Esta linea permite desactivar el escudo en unos segundos
     }
 
-    void DesactivadorDeEscudo()
+    void DesactivadorDeEscudo() // Funcion para desactivar el escudo
     {
         proteccion.SetActive(false);
     }
 
-    void AnimacionMuerteAvion()
+    void AnimacionMuerteAvion() // Animacion para la muerte del jugador
     {
         audioUsar.PlayOneShot(explosionJugador);
         explosionJugadorP.Stop();
         explosionJugadorP.Play();
     }
 
-    void muerteAvion()
+    void muerteAvion() // Funcion que nos lleva a una escena que describe que perdiste
     {
         if(vidas <= 0)
         {
-            SceneManager.LoadScene("Moriste");
+            SceneManager.LoadScene("Moriste"); // comando para cargar una escena determinada
         }
     }
 
     void MovimientoAvion()
     {
         // transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        var rigidbody = GetComponent<Rigidbody>();
+
+        rigidbody.velocity = new Vector3(joystick.Horizontal * velocidadMovimiento,
+            joystick.Vertical * velocidadMovimiento,
+            rigidbody.velocity.z); 
 
         if (Input.GetKey(KeyCode.W)) // Condicion para moverse hacia adelante con la tecla W
         {            
@@ -244,7 +255,7 @@ public class LogicaJugador : MonoBehaviour
             transform.position -= transform.up * (velocidadMovimiento) * Time.deltaTime; // Transforma la posicion hacia el frente 
 
         }
-
+        // theTransform aplica la restriccion que solo permite moverse donde ve la camara
         theTransform.position = new Vector3(
             Mathf.Clamp(transform.position.x, -camaraPantallaXYPlus.x + offsetX, camaraPantallaXYPlus.x - offsetX),
             Mathf.Clamp(transform.position.y, -camaraPantallaXYPlus.y + offsetY, camaraPantallaXYPlus.y - offsetY),

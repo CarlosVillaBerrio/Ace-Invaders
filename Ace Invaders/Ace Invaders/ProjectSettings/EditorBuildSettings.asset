@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/SeleccionDificultad.unity
     guid: 799677de7c1566e4584f25a5427d3fe7
   - enabled: 1
-    path: Assets/Scenes/DefensaAereaBebe.unity
-    guid: a1cd7da52f732ae4c983253423440308
+    path: Assets/Scenes/DefensaAereaBebeAPK.unity
+    guid: e0f1b73ca71af974e91569777937070d
   - enabled: 1
-    path: Assets/Scenes/DefensaAereaPiloto.unity
-    guid: 948c65b143f597949971979803c1f1ba
+    path: Assets/Scenes/DefensaAereaPilotoAPK.unity
+    guid: faf2cf6d16c25dd408425c5e963d559a
   - enabled: 1
     path: Assets/Scenes/Moriste.unity
     guid: 408406a4f1d5c324c8e9fa24094c0325

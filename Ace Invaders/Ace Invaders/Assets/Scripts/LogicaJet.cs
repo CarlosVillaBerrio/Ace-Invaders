@@ -7,16 +7,16 @@ public class LogicaJet : Enemigos
 
     void Awake()
     {
-        audioUsar = GetComponent<AudioSource>();
+        audioUsar = GetComponent<AudioSource>(); // Para usar los sonidos del avion
 
     }
 
     void Update()
     {
-        AtaqueKamikaze();
+        AtaqueKamikaze(); // Funcion para los ataques suicidas del avion
     }
 
-    void AtaqueKamikaze()
+    void AtaqueKamikaze() // Funcion del tipo de ataque del avion
     {
         transform.position += transform.right * (velocidadMovimiento) * Time.deltaTime; // Transforma la posicion hacia la derecha   
 
@@ -28,7 +28,7 @@ public class LogicaJet : Enemigos
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) // colisiones que admite el avion
     {
         if (collision.gameObject.name == "BalaNormal")
         {

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ControladorEnemigos : MonoBehaviour
 {
-    int[] hordas = new int[4];
+    int[] hordas = new int[4]; // establecemos el numero de hordas
 
     int contadorOleadas = 0;
 
@@ -19,7 +19,7 @@ public class ControladorEnemigos : MonoBehaviour
 
     void Start()
     {
-        var horda1 = FindObjectsOfType<LogicaJet>();
+        var horda1 = FindObjectsOfType<LogicaJet>(); // Realizamos la busqueda de los grupos que componen las hordas
         var horda2 = FindObjectsOfType<LogicaAvioneta>();
         var horda3 = FindObjectsOfType<LogicaBombardero>();
         var horda4 = FindObjectsOfType<LogicaJefeFinal>();
@@ -39,20 +39,20 @@ public class ControladorEnemigos : MonoBehaviour
 
     void Update()
     {
-        contadorTiempo += Time.deltaTime;
+        contadorTiempo += Time.deltaTime; 
     }
 
-    public void ComprobarOla()
+    public void ComprobarOla() // Funcion que comprueba la ola actual y lanza otra si se cumple la condicion
     {
         contadorDeEnemis();
         if ((cantidadEnemigos <= 0 && contadorOleadas < 4) || contadorTiempo > 70f)
         {
-            LanzarOleada(grupos[contadorOleadas]);
+            LanzarOleada(grupos[contadorOleadas]); // funcion que tira otra horda
             contadorTiempo = 0f;
         }
     }
 
-    public void LanzarOleada(GameObject oleadaActual)
+    public void LanzarOleada(GameObject oleadaActual) // Activa las hordas en orden numerico
     {
         oleadaActual.SetActive(true);
         cantidadEnemigos += hordas[contadorOleadas];
@@ -60,7 +60,7 @@ public class ControladorEnemigos : MonoBehaviour
         contadorOleadas++;
     }
 
-    public void contadorDeEnemis()
+    public void contadorDeEnemis() // Permite que el Ui muestre el numero de enemigos actuales
     {
         cantidadEnemigos--;
         nEnemigos.GetComponent<Text>().text = "Enemigos: " + cantidadEnemigos.ToString();

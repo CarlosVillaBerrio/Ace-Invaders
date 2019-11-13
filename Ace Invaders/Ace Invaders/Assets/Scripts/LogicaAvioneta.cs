@@ -15,7 +15,7 @@ public class LogicaAvioneta : Enemigos
     // Update is called once per frame
     void Update()
     {
-        AtaqueAvioneta();
+        AtaqueAvioneta(); // Se mueve de un lado a otro
     }
 
     void AtaqueAvioneta()
@@ -26,13 +26,13 @@ public class LogicaAvioneta : Enemigos
 
         if (transform.localPosition.x >= 250f)
         {
-            randomX = Random.Range(-500f, -360f);
+            randomX = Random.Range(-500f, -360f); // Establece las posiciones iniciales al terminar de recorrer la paantalla
             randomY = Random.Range(-40f, 200f);
             transform.localPosition = new Vector3(randomX, randomY, transform.localPosition.z);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) // Tipos de collisiones que acepta el avion
     {
         if (collision.gameObject.name == "BalaNormal")
         {

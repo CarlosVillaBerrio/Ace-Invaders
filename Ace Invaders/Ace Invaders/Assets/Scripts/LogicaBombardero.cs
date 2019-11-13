@@ -5,15 +5,15 @@ using UnityEngine;
 public class LogicaBombardero : Enemigos
 {
     string pasos = "Iniciar";
-    int direccional = 1;
-    float contador = 0f;
+    int direccional = 1; // Variable para la direccion en la que se mueve
+    float contador = 0f; // Cuenta el tiempo para el cambio de direccion
     float duracionBalaEnEscena = 1.5f;
     
     void Awake()
     {
-        durabilidad = 200;
-        velocidadMovimiento = 40f;
-        audioUsar = GetComponent<AudioSource>();
+        durabilidad = 200; // Vida del avion
+        velocidadMovimiento = 40f; // Velocidad del avion
+        audioUsar = GetComponent<AudioSource>(); // Para los sonidos del avion
     }
 
     void Update()
@@ -22,24 +22,24 @@ public class LogicaBombardero : Enemigos
         Atacar();
     }
 
-    IEnumerator ReiniciarTiempoNoDisparo()
+    IEnumerator ReiniciarTiempoNoDisparo() // Cadencia de disparo
     {
         yield return new WaitForSeconds(ritmoDeDisparo);
         tiempoNoDisparo = false;
     }
 
-    void EfectoDisparo()
+    void EfectoDisparo() // Efecto de disparo del avion
     {
         fuegoDeArma.Stop();
         fuegoDeArma.Play();
     }
 
-    void EfectoDisparoEspecial()
+    void EfectoDisparoEspecial() // Efecto de disparo del avion
     {
         fuegoDeArmaEspecial.Stop();
         fuegoDeArmaEspecial.Play();
     }
-
+    // Los tiros que hace el avion. HACE DOBLE DISPARO
     void TiroNormalR()
     {
         audioUsar.PlayOneShot(disparoNormal);
@@ -74,7 +74,7 @@ public class LogicaBombardero : Enemigos
         Destroy(balaInstance, duracionBalaEnEscena);
     }
 
-    void PasoInicial()
+    void PasoInicial() // animacion del avion al entrar en escena
     {
         transform.position += transform.right * (velocidadMovimiento) * Time.deltaTime; // Transforma la posicion hacia la derecha    
         if (transform.localPosition.y <= 180)
@@ -85,7 +85,7 @@ public class LogicaBombardero : Enemigos
         }
     }
 
-    void PasoEjecucion()
+    void PasoEjecucion() // Comportamiento del avion cuando ya se encuentra en escena
     {
         transform.position += direccional * transform.up * (velocidadMovimiento) * Time.deltaTime; // Transforma la posicion hacia la derecha  
         contador += Time.deltaTime;
@@ -96,7 +96,7 @@ public class LogicaBombardero : Enemigos
         }
     }
 
-    void Mover()
+    void Mover() // Separa las acciones del avion que involucran movimiento
     {
         switch (pasos)
         {
@@ -111,7 +111,7 @@ public class LogicaBombardero : Enemigos
         }
     }
 
-    void Atacar()
+    void Atacar() // Funcion para que el avion dispare
     {
         if (tiempoNoDisparo) return;
 
@@ -123,7 +123,7 @@ public class LogicaBombardero : Enemigos
         }
     }
 
-    private void OnCollisionEnter(Collision collision)    
+    private void OnCollisionEnter(Collision collision)  // Colisiones que permite el avion   
     {
         if (collision.gameObject.name == "BalaNormal")
         {

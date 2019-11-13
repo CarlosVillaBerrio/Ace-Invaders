@@ -6,12 +6,12 @@ public class BotonSalir : MonoBehaviour
 {
     private void OnMouseDown()
     {
-        FuncionSalir();
+        FuncionSalir(); // Funcion que permite salir de la app mediante un boton
     }
 
     public void FuncionSalir()
     {
-        Application.Quit();
+        Application.Quit(); // Comando de unity para salir de aplicaciones
     }
 
 }

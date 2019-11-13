@@ -5,19 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class VolverAlInicio : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         Invoke("Volveichon", 13.52f);
     }
+    
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void Volveichon()
+    void Volveichon() // Volvemos a la seleccion de dificultad
     {
         SceneManager.LoadScene("SeleccionDificultad");
     }
